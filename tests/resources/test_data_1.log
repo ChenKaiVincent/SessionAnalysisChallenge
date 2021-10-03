@@ -1,0 +1,1 @@
+2015-07-22T09:00:28.068481Z marketpalce-shop 100.100.100.100:51582 10.0.0.1:80 0.1 0.1 0.1 302 302 0 534 "GET https://abc.com:443/shop/login?a=foo&b=bar HTTP/1.1" "Mozilla" ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2

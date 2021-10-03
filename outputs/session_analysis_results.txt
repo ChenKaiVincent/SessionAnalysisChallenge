@@ -1,0 +1,66 @@
+file name: file:///home/vincent_lin/Projects/Dev/spark/paypay/DataEngineerChallenge/data/2015_07_22_mktplace_shop_web_log_sample.log
+root
+ |-- time: string (nullable = true)
+ |-- elb: string (nullable = true)
+ |-- client:port: string (nullable = true)
+ |-- backend:port: string (nullable = true)
+ |-- request_processing_time: float (nullable = true)
+ |-- backend_processing_time: float (nullable = true)
+ |-- response_processing_time: float (nullable = true)
+ |-- elb_status_code: integer (nullable = true)
+ |-- backend_status_code: integer (nullable = true)
+ |-- received_bytes: integer (nullable = true)
+ |-- sent_bytes: integer (nullable = true)
+ |-- request: string (nullable = true)
+ |-- user_agent: string (nullable = true)
+ |-- ssl_cipher: string (nullable = true)
+ |-- ssl_protocol: string (nullable = true)
+
+analysis 1: Sessionize the web log by IP. (aggregrate all page hits by visitor/IP during a session.)
++------------+----------------------------------------------------------------+----------+
+|client_ip   |session                                                         |count(url)|
++------------+----------------------------------------------------------------+----------+
+|1.186.143.37|a3c7a92ed13e4438a8427740b5f960a3f01642241fd30d0ff2335782cbd29a1e|2         |
+|1.187.164.29|cdea3c05387cf2ffb49419ddcff1f6f69b4ab91a655735971382171304d7c3ad|9         |
+|1.22.41.76  |970835650e3396abc9bb113eb027a1b04a6d9a54ad980dc5dfb16d9e24c5ca26|8         |
+|1.23.208.26 |9bbba19f5e0a160e92dfd112bf76e391aca7b41a419c68ff27a1a3e165ec69c8|6         |
+|1.23.36.184 |3079aad2f5a05c57c273b9191dce91cd6eea3dd1a671fcd3039da9c83fc56949|4         |
+|1.38.19.8   |5f5ca2184d8834aabe1a1b64a2b612922bbadee3847502b7fb47824d1c1c2730|2         |
+|1.38.20.34  |158d0c7f5859f39f836aa22c365952f3bce2be93ad0c6fde41136323eac3605c|35        |
+|1.39.13.13  |1ecf3f0927c41d1065ec94f7e9f491f8795d61d2dd77fb42e185ae0793d68897|2         |
+|1.39.32.249 |e438ba03facf3f17e8628c8160de37c8c6b0f68f2494135b61d73b5465049707|4         |
+|1.39.32.249 |97349f1f694d3cb5a5de81fb4da299c323394eea795ebbfdafab6c1d1d1f31ae|2         |
++------------+----------------------------------------------------------------+----------+
+only showing top 10 rows
+
+analysis 2: Determine the average session time
++-----------------+
+|avg(session_time)|
++-----------------+
+|574.5638545717812|
++-----------------+
+
+analysis 3: Determine unique URL visits per session. To clarify, count a hit to a unique URL only once per session.
++------------+----------------------------------------------------------------+-------------------+
+|client_ip   |session                                                         |count(DISTINCT url)|
++------------+----------------------------------------------------------------+-------------------+
+|1.186.143.37|a3c7a92ed13e4438a8427740b5f960a3f01642241fd30d0ff2335782cbd29a1e|2                  |
+|1.187.164.29|cdea3c05387cf2ffb49419ddcff1f6f69b4ab91a655735971382171304d7c3ad|8                  |
+|1.22.41.76  |970835650e3396abc9bb113eb027a1b04a6d9a54ad980dc5dfb16d9e24c5ca26|5                  |
+|1.23.208.26 |9bbba19f5e0a160e92dfd112bf76e391aca7b41a419c68ff27a1a3e165ec69c8|6                  |
+|1.23.36.184 |3079aad2f5a05c57c273b9191dce91cd6eea3dd1a671fcd3039da9c83fc56949|4                  |
+|1.38.19.8   |5f5ca2184d8834aabe1a1b64a2b612922bbadee3847502b7fb47824d1c1c2730|1                  |
+|1.38.20.34  |158d0c7f5859f39f836aa22c365952f3bce2be93ad0c6fde41136323eac3605c|14                 |
+|1.39.13.13  |1ecf3f0927c41d1065ec94f7e9f491f8795d61d2dd77fb42e185ae0793d68897|2                  |
+|1.39.32.249 |e438ba03facf3f17e8628c8160de37c8c6b0f68f2494135b61d73b5465049707|4                  |
+|1.39.32.249 |97349f1f694d3cb5a5de81fb4da299c323394eea795ebbfdafab6c1d1d1f31ae|2                  |
++------------+----------------------------------------------------------------+-------------------+
+only showing top 10 rows
+
+analysis 4: Find the most engaged users, ie the IPs with the longest session times
++-----------------+
+|max(session_time)|
++-----------------+
+|4097             |
++-----------------+
+
