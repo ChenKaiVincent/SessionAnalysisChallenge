@@ -1,5 +1,6 @@
 ==== explorations =====
-group by ip count by port 
+Curious about how many ports does each client used to connect the elb.
+Simply group by ip count by port, looks many clients have ever used multiple ports.
 +---------------+-----+
 |      client_ip|count|
 +---------------+-----+
@@ -25,14 +26,18 @@ group by ip count by port
 |  15.211.153.73|    3|
 +---------------+-----+
 
-set timezone to utc
+
+Be sure to take care about the timezone, because different timezones will cause the analytic results differ.
+Set timezone to utc to garantee the processed result is consistent no matter which timezone is used in your local system.
 +---------------------------+----------+
 |time                       |timestamp |
 +---------------------------+----------+
 |2015-07-22T09:00:28.019143Z|1437526847|
 +---------------------------+----------+
 
-http_methods
+
+Curious about how many different http_methods are used in this log.
+Below is the disttibutions. (p.s. found there is a "GET value, but it doesn't effect our session analysis so we can skip handling it)
 +-----------+-------+
 |http_method|  count|
 +-----------+-------+
@@ -46,59 +51,41 @@ http_methods
 +-----------+-------+
 
 
-request
-
+Below is one example of request for each kind of http_method.
 +----------------------------------------------------------------------------------------+
 |request                                                                                 |
 +----------------------------------------------------------------------------------------+
 |OPTIONS https://paytm.com:443/offer/wp-content/plugins/wc-gallery/includes/css/ HTTP/1.1|
-+----------------------------------------------------------------------------------------+
-
-+--------------------------------------------------------------+
-|request                                                       |
 +--------------------------------------------------------------+
 |POST https://paytm.com:443/papi/v1/expresscart/verify HTTP/1.1|
 +--------------------------------------------------------------+
-
-+---------------------------------------------------------------------------+
-|request                                                                    |
 +---------------------------------------------------------------------------+
 |DELETE https://paytm.com:443/shop/user/apps?merchant=merchant-uber HTTP/1.1|
 +---------------------------------------------------------------------------+
-
-+----------------------------------------------------+
-|request                                             |
 +----------------------------------------------------+
 |PUT https://paytm.com:443/shop/user/address HTTP/1.1|
 +----------------------------------------------------+
-
-+------------------------------------------------------------------------------------+
-|request                                                                             |
 +------------------------------------------------------------------------------------+
 |"GET http://paytm.com:80/%27"()&%251%3CScRiPt%20%3Eprompt(981045)%3C/ScRiPt%3E/about|
 +------------------------------------------------------------------------------------+
-
-+-------------------------------------------------------------------------------+
-|request                                                                        |
 +-------------------------------------------------------------------------------+
 |HEAD https://paytm.com:443/shop/search/?q=electric%20cooker&brand=2572 HTTP/1.1|
 +-------------------------------------------------------------------------------+
-
-+---------------------------------------------------------------------------------------------------------+
-|request                                                                                                  |
 +---------------------------------------------------------------------------------------------------------+
 |GET https://paytm.com:443/shop/authresponse?code=f2405b05-e2ee-4b0d-8f6a-9fed0fcfe2e0&state=null HTTP/1.1|
 +---------------------------------------------------------------------------------------------------------+
 
 
-check if there exists a url accessed by the same ip but different ports
-client_ip->url   ( 862576, 3)
-client_port->url (1043423, 3)
+Curious about if there exists a url accessed by the same ip but different ports.
+According to below count results, there does exist some urls accessed by the same ip but different ports.
+- group by url count by ip       ( 862576)
+- group by url count by ip,port  (1043423)
 
 
-how many different elb ?
+Curious about how many different ELBs in this log. The result shows 1.
 +----------------+-------+
 |             elb|  count|
 +----------------+-------+
 |marketpalce-shop|1158500|
 +----------------+-------+
+
