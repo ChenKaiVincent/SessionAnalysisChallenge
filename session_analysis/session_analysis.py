@@ -34,9 +34,9 @@ def get_session_time(session_df):
     return session_df.groupBy(["client_ip", "session"]) \
                              .agg(min(session_df.timestamp).alias("min_timestamp"),
                                   max(session_df.timestamp).alias("max_timestamp")) \
-                             .withColumn("session_time", col("max_timestamp") - col("min_timestamp")) #\
-                             #.drop("min_timestamp") \
-                             #.drop("max_timestamp")
+                             .withColumn("session_time", col("max_timestamp") - col("min_timestamp")) \
+                             .drop("min_timestamp") \
+                             .drop("max_timestamp")
 
 if __name__ == "__main__":
     file_name = sys.argv[1]
